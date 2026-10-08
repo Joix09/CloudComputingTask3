@@ -1,0 +1,20 @@
+# Backend
+backend/target/
+*.class
+.idea/
+*.iml
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+*.tsbuildinfo
+
+# OS / misc
+.DS_Store
+.env
+
+# Azure publish profiles contain deployment credentials
+*-profile.xml
+*.PublishSettings
