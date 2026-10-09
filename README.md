@@ -6,7 +6,7 @@ Rent equipment (basketballs, laptops, tools...) with an account, see who rented 
 |---|---|---|
 | Frontend | Next.js 15 (TypeScript) | App Service (Linux, Node 22) |
 | Backend / public API | Spring Boot 3.3, Java 21, Swagger | App Service (Linux, Java 21) |
-| Database | PostgreSQL 16 | Azure Database for PostgreSQL – Flexible Server |
+| Database | PostgreSQL 18 | Azure Database for PostgreSQL – Flexible Server |
 | CI/CD | GitHub Actions | |
 
 ```
