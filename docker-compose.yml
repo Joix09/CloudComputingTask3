@@ -1,7 +1,7 @@
 # Local PostgreSQL for development: docker compose up -d
 services:
   postgres:
-    image: postgres:16
+    image: postgres:18
     environment:
       POSTGRES_DB: rentaldb
       POSTGRES_USER: rental
@@ -9,6 +9,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # Postgres 18+ keeps its data in a versioned subfolder, so mount the parent directory
+      - pgdata:/var/lib/postgresql
 volumes:
   pgdata:
