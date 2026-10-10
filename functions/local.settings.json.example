@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "DB_HOST": "localhost",
+    "DB_PORT": "5432",
+    "DB_NAME": "rentaldb",
+    "DB_USER": "rental",
+    "DB_PASSWORD": "rental",
+    "DB_SSL": "false"
+  }
+}

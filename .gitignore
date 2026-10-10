@@ -11,6 +11,10 @@ frontend/out/
 frontend/.env.local
 *.tsbuildinfo
 
+# Azure Functions (local.settings.json holds connection strings)
+functions/node_modules/
+functions/local.settings.json
+
 # OS / misc
 .DS_Store
 .env
