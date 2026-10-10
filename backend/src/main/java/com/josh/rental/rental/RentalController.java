@@ -7,7 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -37,6 +40,15 @@ public class RentalController {
     @Operation(summary = "Get one rental")
     public RentalResponse get(@PathVariable Long id) {
         return service.get(id);
+    }
+
+    @GetMapping(value = "/rentals/{id}/receipt", produces = MediaType.APPLICATION_PDF_VALUE)
+    @Operation(summary = "Download the rental's PDF receipt (stored in Azure Blob Storage)")
+    public ResponseEntity<byte[]> receipt(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment().filename("receipt-" + id + ".pdf").build().toString())
+                .body(service.receipt(id));
     }
 
     @PostMapping("/items/{itemId}/rentals")

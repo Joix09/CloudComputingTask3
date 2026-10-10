@@ -4,6 +4,7 @@ import com.josh.rental.common.FieldValidationException;
 import com.josh.rental.common.NotFoundException;
 import com.josh.rental.item.Item;
 import com.josh.rental.item.ItemRepository;
+import com.josh.rental.receipt.ReceiptService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,12 @@ public class RentalService {
 
     private final RentalRepository rentals;
     private final ItemRepository items;
+    private final ReceiptService receipts;
 
-    public RentalService(RentalRepository rentals, ItemRepository items) {
+    public RentalService(RentalRepository rentals, ItemRepository items, ReceiptService receipts) {
         this.rentals = rentals;
         this.items = items;
+        this.receipts = receipts;
     }
 
     @Transactional(readOnly = true)
@@ -55,7 +58,9 @@ public class RentalService {
         rental.setItem(item);
         apply(rental, request);
         item.setAvailable(false);
-        return RentalResponse.from(rentals.save(rental));
+        rentals.save(rental);
+        receipts.save(rental);
+        return RentalResponse.from(rental);
     }
 
     public RentalResponse update(Long id, RentalRequest request) {
@@ -66,6 +71,7 @@ public class RentalService {
         checkStartDate(request.startDate(), rental.getStartDate());
         checkRentalDays(rental.getItem(), request.rentalDays());
         apply(rental, request);
+        receipts.save(rental);
         return RentalResponse.from(rental);
     }
 
@@ -77,6 +83,7 @@ public class RentalService {
         rental.setStatus(RentalStatus.RETURNED);
         rental.setReturnedAt(Instant.now());
         rental.getItem().setAvailable(true);
+        receipts.save(rental);
         return RentalResponse.from(rental);
     }
 
@@ -87,6 +94,13 @@ public class RentalService {
             rental.getItem().setAvailable(true);
         }
         rentals.delete(rental);
+        receipts.delete(id);
+    }
+
+    /** The receipt PDF from Blob Storage. */
+    @Transactional(readOnly = true)
+    public byte[] receipt(Long id) {
+        return receipts.get(find(id));
     }
 
     private Rental find(Long id) {

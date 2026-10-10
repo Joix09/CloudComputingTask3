@@ -1,6 +1,7 @@
 package com.josh.rental.item;
 
 import com.josh.rental.common.NotFoundException;
+import com.josh.rental.receipt.ReceiptService;
 import com.josh.rental.rental.Rental;
 import com.josh.rental.rental.RentalRepository;
 import com.josh.rental.rental.RentalStatus;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,10 +21,12 @@ public class ItemService {
 
     private final ItemRepository repository;
     private final RentalRepository rentals;
+    private final ReceiptService receipts;
 
-    public ItemService(ItemRepository repository, RentalRepository rentals) {
+    public ItemService(ItemRepository repository, RentalRepository rentals, ReceiptService receipts) {
         this.repository = repository;
         this.rentals = rentals;
+        this.receipts = receipts;
     }
 
     @Transactional(readOnly = true)
@@ -67,8 +71,10 @@ public class ItemService {
             throw new IllegalStateException("Item is currently rented out and cannot be deleted");
         }
         // Only returned rentals are left at this point; they're history of an item that no longer exists
-        rentals.deleteByItemId(id);
+        List<Rental> history = rentals.findByItemId(id);
+        rentals.deleteAll(history);
         repository.delete(item);
+        history.forEach(r -> receipts.delete(r.getId()));
     }
 
     private ItemResponse toResponse(Item item) {

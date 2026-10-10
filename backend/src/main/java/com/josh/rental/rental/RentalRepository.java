@@ -23,5 +23,5 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
 
     List<Rental> findByItemIdInAndStatusIn(Collection<Long> itemIds, Collection<RentalStatus> statuses);
 
-    void deleteByItemId(Long itemId);
+    List<Rental> findByItemId(Long itemId);
 }
