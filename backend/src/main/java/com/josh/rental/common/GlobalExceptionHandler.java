@@ -53,6 +53,12 @@ public class GlobalExceptionHandler {
                 ApiError.of(400, "Bad Request", "Invalid value for parameter '" + ex.getName() + "'", Map.of()));
     }
 
+    @ExceptionHandler(FieldValidationException.class)
+    public ResponseEntity<ApiError> handleFieldValidation(FieldValidationException ex) {
+        return ResponseEntity.badRequest().body(
+                ApiError.of(400, "Bad Request", "Validation failed", Map.of(ex.getField(), ex.getMessage())));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
