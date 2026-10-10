@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Lending Desk",
-  description: "Rent equipment with your account and track who has what.",
+  description: "Rent equipment and track who has what, and until when.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <nav className="nav" aria-label="Main">
               <Link href="/items">Equipment</Link>
+              <Link href="/rentals">Rentals</Link>
             </nav>
           </div>
         </header>
