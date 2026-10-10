@@ -111,6 +111,9 @@ export default function ItemDetailPage() {
                       <Link href={`/rentals/${rental.id}/edit`} className="btn btn-ghost">
                         Change rental
                       </Link>
+                      <a href={api.receiptUrl(rental.id)} className="btn btn-ghost">
+                        Download receipt
+                      </a>
                     </div>
                   </>
                 ) : (
@@ -122,7 +125,7 @@ export default function ItemDetailPage() {
                       submitLabel="Rent it"
                       onSubmit={async (input) => {
                         const created = await api.createRental(item.id, input);
-                        setNotice(`Rented! Bring it back by ${formatDate(created.dueDate)}.`);
+                        setNotice(`Rented! Bring it back by ${formatDate(created.dueDate)}. Your receipt is ready below.`);
                         await load();
                       }}
                     />

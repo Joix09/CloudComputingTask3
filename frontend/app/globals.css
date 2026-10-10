@@ -236,7 +236,7 @@ label.checkbox input { width: 18px; height: 18px; margin: 2px 0 0; flex: none; }
 .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
 .field-error { font-size: 13px; color: var(--out); margin-top: 4px; }
 .has-error input, .has-error select, .has-error textarea { border-color: var(--out); }
-.form-actions { display: flex; gap: 12px; margin-top: 28px; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 
 .detail {
   display: grid;

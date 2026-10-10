@@ -83,6 +83,10 @@ export const api = {
   deleteRental(id: string | number) {
     return request<void>(`/api/rentals/${id}`, { method: "DELETE" });
   },
+  /** Plain link target: the browser downloads the PDF directly from the API. */
+  receiptUrl(id: string | number) {
+    return `${BASE_URL}/api/rentals/${id}/receipt`;
+  },
 };
 
 export const formatPrice = (n: number) =>

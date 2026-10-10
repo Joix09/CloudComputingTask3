@@ -134,6 +134,9 @@ export default function RentalsPage() {
                     </td>
                     <td>
                       <div className="row-actions">
+                        <a href={api.receiptUrl(r.id)} className="btn btn-small btn-ghost">
+                          Receipt
+                        </a>
                         {open && (
                           <button className="btn btn-small" onClick={() => act(r, "return")} disabled={busyId === r.id}>
                             Returned
