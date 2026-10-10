@@ -1,4 +1,4 @@
-import type { Item, ItemCategory, ItemInput, Page } from "./types";
+import type { Item, ItemCategory, ItemInput, Page, Rental, RentalInput, RentalStatus } from "./types";
 
 const BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080").replace(/\/$/, "");
 
@@ -60,7 +60,46 @@ export const api = {
   deleteItem(id: string | number) {
     return request<void>(`/api/items/${id}`, { method: "DELETE" });
   },
+
+  listRentals(filters: { status?: RentalStatus | ""; page?: number; size?: number } = {}) {
+    const params = new URLSearchParams();
+    if (filters.status) params.set("status", filters.status);
+    params.set("page", String(filters.page ?? 0));
+    params.set("size", String(filters.size ?? 20));
+    return request<Page<Rental>>(`/api/rentals?${params}`);
+  },
+  getRental(id: string | number) {
+    return request<Rental>(`/api/rentals/${id}`);
+  },
+  createRental(itemId: string | number, input: RentalInput) {
+    return request<Rental>(`/api/items/${itemId}/rentals`, { method: "POST", body: JSON.stringify(input) });
+  },
+  updateRental(id: string | number, input: RentalInput) {
+    return request<Rental>(`/api/rentals/${id}`, { method: "PUT", body: JSON.stringify(input) });
+  },
+  returnRental(id: string | number) {
+    return request<Rental>(`/api/rentals/${id}/return`, { method: "POST" });
+  },
+  deleteRental(id: string | number) {
+    return request<void>(`/api/rentals/${id}`, { method: "DELETE" });
+  },
 };
 
 export const formatPrice = (n: number) =>
   new Intl.NumberFormat("en-IE", { style: "currency", currency: "EUR" }).format(n);
+
+const dateFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+/** Formats a yyyy-mm-dd date or an ISO timestamp, e.g. "14 Oct 2026". */
+export const formatDate = (value: string) =>
+  dateFmt.format(new Date(value.length === 10 ? `${value}T00:00:00` : value));
+
+/** Today as yyyy-mm-dd in UTC, the same "today" the backend checks against. */
+export const todayIso = () => new Date().toISOString().slice(0, 10);
+
+/** Adds days to a yyyy-mm-dd date without timezone surprises. */
+export const addDays = (isoDate: string, days: number) => {
+  const d = new Date(`${isoDate}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+};

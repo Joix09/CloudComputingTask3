@@ -19,8 +19,49 @@ export interface Item {
   maxRentalDays: number;
   purchaseDate: string; // yyyy-mm-dd
   available: boolean;
+  currentRental: CurrentRental | null; // null when the item is available
   createdAt: string;
   updatedAt: string;
+}
+
+export type RentalStatus = "ACTIVE" | "OVERDUE" | "RETURNED";
+
+export const RENTAL_STATUS_LABELS: Record<RentalStatus, string> = {
+  ACTIVE: "Active",
+  OVERDUE: "Overdue",
+  RETURNED: "Returned",
+};
+
+export interface CurrentRental {
+  id: number;
+  renterName: string;
+  startDate: string; // yyyy-mm-dd
+  dueDate: string;
+  status: RentalStatus;
+}
+
+export interface Rental {
+  id: number;
+  itemId: number;
+  itemName: string;
+  renterName: string;
+  renterEmail: string;
+  startDate: string;
+  rentalDays: number;
+  dueDate: string;
+  status: RentalStatus;
+  totalPrice: number;
+  returnedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RentalInput {
+  renterName: string;
+  renterEmail: string;
+  startDate: string | null;
+  rentalDays: number | null;
+  agreedToTerms: boolean;
 }
 
 export interface ItemInput {
