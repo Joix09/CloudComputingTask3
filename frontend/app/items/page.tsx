@@ -34,7 +34,7 @@ export default function ItemsPage() {
       <div className="page-head">
         <div>
           <h1>Equipment</h1>
-          <p>Everything in the rental pool, and whether it's on the shelf right now.</p>
+          <p>Pick something to rent. Click an item to see until when you can have it.</p>
         </div>
         <Link href="/items/new" className="btn">
           Add item
@@ -116,7 +116,7 @@ export default function ItemsPage() {
                   <td className="num">{formatPrice(item.dailyPrice)}</td>
                   <td className="num">{item.maxRentalDays}</td>
                   <td>
-                    <StatusTag available={item.available} />
+                    <StatusTag available={item.available} rental={item.currentRental} />
                   </td>
                 </tr>
               ))}
