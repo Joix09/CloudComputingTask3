@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # lets azure/login sign in with GitHub's OIDC token instead of a stored password
+      contents: read
     defaults:
       run:
         working-directory: functions
@@ -23,9 +26,16 @@ jobs:
 
       - run: npm ci --omit=dev
 
+      # Flex Consumption has no publish profile; Azure created these secrets when continuous deployment was enabled
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6EF65AD6C1C74F8982E7CBFE4BD1E312 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CCD08B544EED47C0A2E4DA416421BDC9 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FE2154EDE7094491A8979232240E0DF9 }}
+
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
-          app-name: ${{ vars.FUNCTION_APP_NAME }}
-          publish-profile: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}
+          app-name: cct3-function
           package: functions
