@@ -8,6 +8,7 @@ have it, rent it, and mark it as returned when you bring it back. Items can't be
 | Frontend | Next.js 15 (TypeScript) | App Service (Linux, Node 22) |
 | Backend / public API | Spring Boot 3.3, Java 21, Swagger | App Service (Linux, Java 21) |
 | Database | PostgreSQL 18 | Azure Database for PostgreSQL – Flexible Server |
+| File storage | PDF rental receipts | Blob Storage (private `receipts` container) |
 | Background job | Azure Functions (Node 22, timer trigger) | Function App (Consumption) |
 | CI/CD | GitHub Actions | |
 
@@ -16,7 +17,7 @@ CloudComputingTask3/
 ├── backend/            Spring Boot API  (http://localhost:8080/swagger-ui.html)
 ├── frontend/           Next.js web app  (http://localhost:3000)
 ├── functions/          Overdue checker, runs every 15 minutes
-├── docker-compose.yml  Local PostgreSQL + Azurite (storage emulator for Functions)
+├── docker-compose.yml  Local PostgreSQL + Azurite (storage emulator for receipts and Functions)
 └── .github/workflows/  Deploy pipelines (one per app)
 ```
 
@@ -66,12 +67,22 @@ Validation: `name` String (2–100), `category` enum, `dailyPrice` decimal (0–
 | PUT | `/api/rentals/{id}` | Change or extend (409 if already returned) |
 | POST | `/api/rentals/{id}/return` | Mark as returned, item becomes available again |
 | DELETE | `/api/rentals/{id}` | Delete; cancels it if the item is still out |
+| GET | `/api/rentals/{id}/receipt` | Download the PDF receipt |
 
 Validation: `renterName` String (2–100), `renterEmail` String (email format), `startDate` date (today up to 14 days
 ahead), `rentalDays` integer (1 to the item's `maxRentalDays`), `agreedToTerms` boolean (must be true).
 The due date is `startDate + rentalDays`.
 
 All validation errors return 400 with a `fieldErrors` map.
+
+## File storage
+
+Every rental gets a PDF receipt, stored as `rental-{id}.pdf` in the private `receipts` Blob Storage container. It is
+written when the rental is created, rewritten when it is changed or returned, and deleted with the rental. The
+container isn't public: receipts are only downloadable through the API. Rentals without a stored receipt (e.g. the
+seeded ones) get one created on first download.
+
+Backend setting in Azure: `STORAGE_CONNECTION_STRING`. Locally it defaults to Azurite from docker-compose.
 
 ## Background job
 
