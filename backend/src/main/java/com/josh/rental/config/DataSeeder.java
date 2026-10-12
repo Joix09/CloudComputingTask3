@@ -15,10 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-/**
- * Fills an empty database with the equipment pool on startup, so the app is usable right away.
- * Does nothing if there are already items, so it never overwrites real data.
- */
 @Component
 public class DataSeeder implements ApplicationRunner {
 
@@ -53,8 +49,6 @@ public class DataSeeder implements ApplicationRunner {
         item("Acoustic guitar", ItemCategory.MUSIC, "Full-size steel-string guitar with soft case and tuner.", "7.50", 14, "2022-12-10");
         item("Bluetooth speaker", ItemCategory.MUSIC, "Portable waterproof speaker, about 12 h battery.", "4.50", 7, "2024-07-01");
 
-        // Two example rentals: one running, and one already past its due date
-        // (still ACTIVE, so the overdue checker has something to flag on its first run)
         rental(laptop, "Emma Peeters", "emma.peeters@example.com", today.minusDays(2), 7);
         rental(rackets, "Lucas Janssens", "lucas.janssens@example.com", today.minusDays(6), 4);
 

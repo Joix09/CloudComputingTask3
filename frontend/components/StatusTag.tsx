@@ -1,7 +1,6 @@
 import { formatDate, todayIso } from "@/lib/api";
 import { RENTAL_STATUS_LABELS, type CurrentRental, type RentalStatus } from "@/lib/types";
 
-/** Item status: available, or who-has-it-until-when. */
 export default function StatusTag({ available, rental }: { available: boolean; rental?: CurrentRental | null }) {
   if (available || !rental) {
     return <span className={available ? "tag" : "tag out"}>{available ? "Available" : "Rented out"}</span>;

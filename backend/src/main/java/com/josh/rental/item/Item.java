@@ -33,7 +33,6 @@ public class Item {
     @Column(nullable = false)
     private LocalDate purchaseDate;
 
-    /** Managed by the system, not by the client: false while the item is rented out. */
     @Column(nullable = false)
     private boolean available = true;
 

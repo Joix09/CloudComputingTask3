@@ -83,7 +83,6 @@ export const api = {
   deleteRental(id: string | number) {
     return request<void>(`/api/rentals/${id}`, { method: "DELETE" });
   },
-  /** Plain link target: the browser downloads the PDF directly from the API. */
   receiptUrl(id: string | number) {
     return `${BASE_URL}/api/rentals/${id}/receipt`;
   },
@@ -94,14 +93,11 @@ export const formatPrice = (n: number) =>
 
 const dateFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
-/** Formats a yyyy-mm-dd date or an ISO timestamp, e.g. "14 Oct 2026". */
 export const formatDate = (value: string) =>
   dateFmt.format(new Date(value.length === 10 ? `${value}T00:00:00` : value));
 
-/** Today as yyyy-mm-dd in UTC, the same "today" the backend checks against. */
 export const todayIso = () => new Date().toISOString().slice(0, 10);
 
-/** Adds days to a yyyy-mm-dd date without timezone surprises. */
 export const addDays = (isoDate: string, days: number) => {
   const d = new Date(`${isoDate}T00:00:00Z`);
   d.setUTCDate(d.getUTCDate() + days);

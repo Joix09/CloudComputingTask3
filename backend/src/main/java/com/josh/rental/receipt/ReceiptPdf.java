@@ -19,7 +19,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-/** Draws a one-page A4 receipt for a rental. */
 final class ReceiptPdf {
 
     private static final PDType1Font REGULAR = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
@@ -108,7 +107,6 @@ final class ReceiptPdf {
         cs.endText();
     }
 
-    /** The built-in PDF fonts only cover Western European characters; anything else becomes "?". */
     private static String printable(PDType1Font font, String value) {
         StringBuilder sb = new StringBuilder(value.length());
         value.codePoints().forEach(cp -> {

@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 
-/** What the API returns. Keeps the entity itself out of the public contract. */
 public record ItemResponse(
         Long id,
         String name,
@@ -17,7 +16,6 @@ public record ItemResponse(
         Integer maxRentalDays,
         LocalDate purchaseDate,
         boolean available,
-        /** Who has the item right now and until when; null when it's available. */
         CurrentRental currentRental,
         Instant createdAt,
         Instant updatedAt

@@ -1,6 +1,5 @@
 const { Client } = require("pg");
 
-// Same database as the backend. In Azure these come from the Function App's environment variables.
 function connect() {
   return new Client({
     host: process.env.DB_HOST ?? "localhost",
@@ -8,16 +7,10 @@ function connect() {
     database: process.env.DB_NAME ?? "rentaldb",
     user: process.env.DB_USER ?? "rental",
     password: process.env.DB_PASSWORD ?? "rental",
-    // Azure Database for PostgreSQL only accepts encrypted connections
     ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: true } : false,
   });
 }
 
-/**
- * Flags every rental that is still out after its due date as OVERDUE.
- * Dates are compared in UTC, the same timezone the backend uses.
- * Returns the rentals that were flagged in this run.
- */
 async function markOverdueRentals() {
   const client = connect();
   await client.connect();

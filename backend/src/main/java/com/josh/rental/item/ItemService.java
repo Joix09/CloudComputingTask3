@@ -41,7 +41,6 @@ public class ItemService {
         } else {
             page = repository.findAll(pageable);
         }
-        // One query for the open rentals of the whole page instead of one per item
         Map<Long, Rental> openRentals = rentals
                 .findByItemIdInAndStatusIn(page.map(Item::getId).getContent(), RentalStatus.OPEN).stream()
                 .collect(Collectors.toMap(r -> r.getItem().getId(), Function.identity(), (a, b) -> a));
@@ -70,7 +69,6 @@ public class ItemService {
         if (!item.isAvailable()) {
             throw new IllegalStateException("Item is currently rented out and cannot be deleted");
         }
-        // Only returned rentals are left at this point; they're history of an item that no longer exists
         List<Rental> history = rentals.findByItemId(id);
         rentals.deleteAll(history);
         repository.delete(item);

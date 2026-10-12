@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @Transactional
 public class RentalService {
 
-    /** How far ahead a rental can be booked. */
     static final int MAX_DAYS_AHEAD = 14;
 
     private final RentalRepository rentals;
@@ -42,7 +41,6 @@ public class RentalService {
     }
 
     public RentalResponse create(Long itemId, RentalRequest request) {
-        // Row lock: if two people rent the same item at the same moment, the second one waits and then sees it's taken
         Item item = items.findForUpdate(itemId)
                 .orElseThrow(() -> new NotFoundException("Item " + itemId + " not found"));
         if (!item.isAvailable()) {
@@ -87,7 +85,6 @@ public class RentalService {
         return RentalResponse.from(rental);
     }
 
-    /** Deleting an open rental cancels it, which puts the item back on the shelf. */
     public void delete(Long id) {
         Rental rental = find(id);
         if (rental.getStatus().isOpen()) {
@@ -97,7 +94,6 @@ public class RentalService {
         receipts.delete(id);
     }
 
-    /** The receipt PDF from Blob Storage. */
     @Transactional(readOnly = true)
     public byte[] receipt(Long id) {
         return receipts.get(find(id));
@@ -108,7 +104,6 @@ public class RentalService {
                 .orElseThrow(() -> new NotFoundException("Rental " + id + " not found"));
     }
 
-    /** On update, an unchanged start date is fine even if it's now in the past. */
     private void checkStartDate(LocalDate startDate, LocalDate currentStartDate) {
         if (startDate.equals(currentStartDate)) {
             return;
@@ -136,7 +131,6 @@ public class RentalService {
         rental.setStartDate(request.startDate());
         rental.setRentalDays(request.rentalDays());
         rental.setDueDate(request.startDate().plusDays(request.rentalDays()));
-        // Extending an overdue rental makes it active again
         rental.setStatus(rental.getDueDate().isBefore(LocalDate.now()) ? RentalStatus.OVERDUE : RentalStatus.ACTIVE);
     }
 }

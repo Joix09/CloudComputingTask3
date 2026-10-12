@@ -4,11 +4,6 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-/**
- * What a client sends to rent an item or change a rental. Validation covers four data types:
- * String, LocalDate, Integer and Boolean. Rules that depend on the item (its max rental days)
- * or on today's date are checked in {@link RentalService}.
- */
 public record RentalRequest(
         @NotBlank(message = "Name is required")
         @Size(min = 2, max = 100, message = "Name must be 2-100 characters")

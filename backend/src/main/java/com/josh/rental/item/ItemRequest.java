@@ -5,10 +5,6 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-/**
- * What a client sends to create or update an item. Validation covers five data types:
- * String, enum, BigDecimal, Integer and LocalDate.
- */
 public record ItemRequest(
 
         @NotBlank(message = "Name is required")

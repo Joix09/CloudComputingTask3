@@ -38,8 +38,6 @@ export default function ItemForm({ initial, submitLabel, onSubmit, onCancel }: P
     setSaving(true);
     setFormError(null);
     setFieldErrors({});
-    // Convert form strings into the types the API expects. Empty fields become null so the
-    // backend's @NotNull checks report them, rather than the frontend guessing a value.
     const input: ItemInput = {
       name: form.name,
       description: form.description.trim() || null,

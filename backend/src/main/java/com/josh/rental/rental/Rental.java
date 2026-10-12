@@ -30,7 +30,6 @@ public class Rental {
     @Column(nullable = false)
     private Integer rentalDays;
 
-    /** startDate + rentalDays: the day the item has to be back. */
     @Column(nullable = false)
     private LocalDate dueDate;
 

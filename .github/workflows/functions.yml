@@ -10,7 +10,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write # lets azure/login sign in with GitHub's OIDC token instead of a stored password
+      id-token: write
       contents: read
     defaults:
       run:
@@ -26,7 +26,6 @@ jobs:
 
       - run: npm ci --omit=dev
 
-      # Flex Consumption has no publish profile; Azure created these secrets when continuous deployment was enabled
       - name: Login to Azure
         uses: azure/login@v2
         with:

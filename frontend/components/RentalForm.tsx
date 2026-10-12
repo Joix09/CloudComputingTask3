@@ -4,7 +4,6 @@ import { useState } from "react";
 import { addDays, ApiError, formatDate, formatPrice, todayIso } from "@/lib/api";
 import type { Item, Rental, RentalInput } from "@/lib/types";
 
-/** Must match RentalService.MAX_DAYS_AHEAD in the backend. */
 const MAX_DAYS_AHEAD = 14;
 
 interface Props {
@@ -36,7 +35,6 @@ export default function RentalForm({ item, initial, submitLabel, onSubmit, onCan
     setFieldErrors(({ [key]: _removed, ...rest }) => rest);
   };
 
-  // An existing rental may keep a start date that is now in the past
   const minStart = initial && initial.startDate < today ? initial.startDate : today;
   const maxStart = addDays(today, MAX_DAYS_AHEAD);
 

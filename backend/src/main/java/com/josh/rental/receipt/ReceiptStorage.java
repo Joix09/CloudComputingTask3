@@ -11,10 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-/**
- * Stores receipt PDFs as blobs in a private Azure Blob Storage container.
- * Files are only reachable through the API, never through a public blob URL.
- */
 @Component
 public class ReceiptStorage {
 
@@ -50,7 +46,6 @@ public class ReceiptStorage {
         blob(name).deleteIfExists();
     }
 
-    // Created on first use rather than at startup, so the API still starts if storage is briefly unreachable
     private BlobClient blob(String name) {
         if (!containerReady) {
             container.createIfNotExists();

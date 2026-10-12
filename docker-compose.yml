@@ -1,4 +1,3 @@
-# Local services for development: docker compose up -d
 services:
   postgres:
     image: postgres:18
@@ -9,10 +8,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      # Postgres 18+ keeps its data in a versioned subfolder, so mount the parent directory
       - pgdata:/var/lib/postgresql
 
-  # Azure Storage emulator. The Functions runtime needs storage to run timer triggers locally.
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     command: azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --skipApiVersionCheck

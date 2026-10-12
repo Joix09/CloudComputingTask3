@@ -17,9 +17,9 @@ export interface Item {
   category: ItemCategory;
   dailyPrice: number;
   maxRentalDays: number;
-  purchaseDate: string; // yyyy-mm-dd
+  purchaseDate: string;
   available: boolean;
-  currentRental: CurrentRental | null; // null when the item is available
+  currentRental: CurrentRental | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -35,7 +35,7 @@ export const RENTAL_STATUS_LABELS: Record<RentalStatus, string> = {
 export interface CurrentRental {
   id: number;
   renterName: string;
-  startDate: string; // yyyy-mm-dd
+  startDate: string;
   dueDate: string;
   status: RentalStatus;
 }

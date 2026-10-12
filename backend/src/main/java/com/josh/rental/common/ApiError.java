@@ -3,7 +3,6 @@ package com.josh.rental.common;
 import java.time.Instant;
 import java.util.Map;
 
-/** Uniform error body returned by every failing request. */
 public record ApiError(
         Instant timestamp,
         int status,

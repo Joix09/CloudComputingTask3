@@ -144,7 +144,6 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .item-link:hover { text-decoration: underline; }
 .code { color: var(--muted); font-variant-numeric: tabular-nums; }
 
-/* The status tag: shaped like a paper equipment tag with a punched hole */
 .tag {
   --bg: var(--ok-bg);
   --fg: var(--ok);

@@ -5,10 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-/**
- * Keeps one PDF receipt per rental in Blob Storage, named rental-{id}.pdf.
- * Saving a receipt never blocks a rental: if storage is down, the receipt is created on first download instead.
- */
 @Service
 public class ReceiptService {
 
@@ -20,7 +16,6 @@ public class ReceiptService {
         this.storage = storage;
     }
 
-    /** Writes (or overwrites) the receipt so it matches the rental's current state. */
     public void save(Rental rental) {
         try {
             storage.upload(blobName(rental.getId()), ReceiptPdf.render(rental));
@@ -29,7 +24,6 @@ public class ReceiptService {
         }
     }
 
-    /** The stored receipt, or a freshly created (and stored) one if it doesn't exist yet. */
     public byte[] get(Rental rental) {
         return storage.download(blobName(rental.getId())).orElseGet(() -> {
             byte[] pdf = ReceiptPdf.render(rental);
